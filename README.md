@@ -1,2 +1,3 @@
 # PSPNet
 PSPNet实现船舶弦号的分割
+如果想用backbone为mobilenet的进行预测
