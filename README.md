@@ -24,8 +24,12 @@ img/1.jpg
 
 # 训练步骤
 ## 1、训练数据集
-（1）将提供的数据集放入VOCdevkit中
+（1）本次模型使用VOC格式进行训练。
 
-（2）在train.py中设置对应参数，默认参数已经对应数据集所需要的参数了，所以只要修改backbone和model_path即可。
+（2）将提供的数据集放入VOCdevkit中，其中将标签文件放在VOCdevkit文件夹下的VOC2007文件夹下的SegmentationClass中。将图片文件放在VOCdevkit文件夹下的VOC2007文件夹下的JPEGImages中。
 
-（3）运行train.py进行训练
+（3）在训练前利用voc2pspnet.py文件生成对应的txt。
+
+（4）在train.py文件夹下面，选择自己要使用的主干模型和下采样因子。本文提供的主干模型有mobilenet和resnet50。
+
+（5）运行train.py进行训练
