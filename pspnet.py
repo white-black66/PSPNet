@@ -26,31 +26,22 @@ def letterbox_image(image, size):
     return new_image, nw, nh
 
 
-# --------------------------------------------#
-#   使用自己训练好的模型预测需要修改3个参数
-#   model_path、backbone和num_classes都需要修改！
-#   如果出现shape不匹配
-#   一定要注意训练时的model_path、
-#   backbone和num_classes数的修改
-# --------------------------------------------#
+
+# PSPNet模型
 class PSPNet(object):
     _defaults = {
         "model_path": 'model_data/pspnet_mobilenetv2.pth',
         "model_image_size": (473, 473, 3),
         "backbone": "mobilenet",
         "downsample_factor": 16,
-        "num_classes": 21,
+        "num_classes": 3,
         "cuda": True,
         # --------------------------------#
         #   blend参数用于控制是否
         #   让识别结果和原图混合
         # --------------------------------#
         "blend": True,
-        # ---------------------------------------------------------------------#
-        #   该变量用于控制是否使用letterbox_image对输入图像进行不失真的resize，
-        #   True和False都可以尝试一下，有些时候正效果，有些时候负效果，比较玄学
-        #   默认设置为预训练数据集中效果比较好的设置方式。
-        # ---------------------------------------------------------------------#
+  
         "letterbox_image": True,
     }
 
@@ -61,13 +52,9 @@ class PSPNet(object):
         self.__dict__.update(self._defaults)
         self.generate()
 
-    # ---------------------------------------------------#
-    #   载入模型
-    # ---------------------------------------------------#
+  
     def generate(self):
-        # -------------------------------#
-        #   载入模型与权值
-        # -------------------------------#
+ 
         self.net = pspnet(num_classes=self.num_classes, downsample_factor=self.downsample_factor, pretrained=False,
                           backbone=self.backbone, aux_branch=False)
         self.net = self.net.eval()
@@ -79,7 +66,7 @@ class PSPNet(object):
             self.net = self.net.cuda()
         print('{} model, anchors, and classes loaded.'.format(self.model_path))
 
-        if self.num_classes <= 21:
+        if self.num_classes <= 3:
             self.colors = [(0, 0, 0), (128, 0, 0), (0, 128, 0), (128, 128, 0), (0, 0, 128), (128, 0, 128),
                            (0, 128, 128),
                            (128, 128, 128), (64, 0, 0), (192, 0, 0), (64, 128, 0), (192, 128, 0), (64, 0, 128),
@@ -105,10 +92,8 @@ class PSPNet(object):
         old_img = copy.deepcopy(image)
         orininal_h = np.array(image).shape[0]
         orininal_w = np.array(image).shape[1]
-
-        # ---------------------------------------------------#
-        #   进行不失真的resize，添加灰条，进行图像归一化
-        # ---------------------------------------------------#
+        
+        # 进行图像归一化
         if self.letterbox_image:
             image, nw, nh = letterbox_image(image, (self.model_image_size[1], self.model_image_size[0]))
         else:
@@ -130,16 +115,12 @@ class PSPNet(object):
             #   取出每一个像素点的种类
             # ---------------------------------------------------#
             pr = F.softmax(pr.permute(1, 2, 0), dim=-1).cpu().numpy().argmax(axis=-1)
-            # --------------------------------------#
-            #   将灰条部分截取掉
-            # --------------------------------------#
+  
             if self.letterbox_image:
                 pr = pr[int((self.model_image_size[0] - nh) // 2):int((self.model_image_size[0] - nh) // 2 + nh),
                      int((self.model_image_size[1] - nw) // 2):int((self.model_image_size[1] - nw) // 2 + nw)]
 
-        # ------------------------------------------------#
-        #   创建一副新图，并根据每个像素点的种类赋予颜色
-        # ------------------------------------------------#
+
         seg_img = np.zeros((np.shape(pr)[0], np.shape(pr)[1], 3))
         for c in range(self.num_classes):
             seg_img[:, :, 0] += ((pr[:, :] == c) * (self.colors[c][0])).astype('uint8')
