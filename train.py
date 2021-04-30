@@ -151,13 +151,8 @@ if __name__ == "__main__":
     #   2+1
     # ---------------------#
     NUM_CLASSES = 3
-    # --------------------------------------------------------------------#
-    #   建议选项：
-    #   种类少（几类）时，设置为True
-    #   种类多（十几类）时，如果batch_size比较大（10以上），那么设置为True
-    #   种类多（十几类）时，如果batch_size比较小（10以下），那么设置为False
-    # ---------------------------------------------------------------------#
-    dice_loss = False
+
+    dice_loss = True
     # -------------------------------#
     #   主干网络预训练权重的使用
     #   mobilenet和resnet50
@@ -204,11 +199,11 @@ if __name__ == "__main__":
         net = net.cuda()
 
     # 打开数据集的txt
-    with open("VOCdevkit/VOC2007/ImageSets/Segmentation/train.txt", "r") as f:
+    with open("VOCdevkit/VOC2007/Segmentation/train.txt", "r") as f:
         train_lines = f.readlines()
 
     # 打开数据集的txt
-    with open("VOCdevkit/VOC2007/ImageSets/Segmentation/val.txt", "r") as f:
+    with open("VOCdevkit/VOC2007/Segmentation/val.txt", "r") as f:
         val_lines = f.readlines()
 
     # ------------------------------------------------------#
