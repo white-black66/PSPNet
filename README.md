@@ -5,7 +5,7 @@ psp_resnet50.pth下载地址
 链接: https://pan.baidu.com/s/16rVQK9ibtc0Pj9pOIRLQOw 提取码: ajfk 
 # 预测步骤
 ## 使用预训练权值
-（1）本模型可以使用mobilenetv2和resnet50进行训练，如果想用backbone为mobilenet的进行预测，直接运行predict.py就可以了；如果想要利用backbone为resnet50的进行预测，在文件model_data中有pspnet_resnet50.pth，修改pspnet.py的backbone和model_path之后再运行predict.py，输入。
+（1）本模型可以使用mobilenetv2和resnet50进行训练，如果想用backbone为mobilenet的进行预测，直接运行predict.py就可以了；如果想要利用backbone为resnet50的进行预测，则需要进行一下修改，在文件model_data中有pspnet_resnet50.pth，修改pspnet.py的backbone和model_path之后再运行predict.py，输入。
 
 (2)在pspnet.py文件里面，在如下部分修改model_path和backbone使其对应训练好的文件；model_path和backbone所使用的提取网络相对应，backbone是所使用的主干特征提取网络。
 ```
@@ -14,7 +14,7 @@ _defaults = {
     "model_image_size"  :   (473, 473, 3),
     "backbone"          :   "mobilenet",
     "downsample_factor" :   16,
-    "num_classes"       :   21,
+    "num_classes"       :   3,
     "cuda"              :   True,
     "blend"             :   True,
 }
