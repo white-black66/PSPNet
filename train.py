@@ -148,7 +148,6 @@ if __name__ == "__main__":
     inputs_size = [473, 473, 3]
     # ---------------------#
     #   分类个数+1
-    #   2+1
     # ---------------------#
     NUM_CLASSES = 3
 
@@ -166,8 +165,6 @@ if __name__ == "__main__":
     aux_branch = False
     # ------------------------------#
     #   下采样的倍数
-    #   16显存占用小
-    #   8显存占用大
     # ------------------------------#
     downsample_factor = 16
     # -------------------------------#
@@ -179,10 +176,9 @@ if __name__ == "__main__":
     model = PSPNet(num_classes=NUM_CLASSES, backbone=backbone, downsample_factor=downsample_factor,
                    pretrained=pretrained, aux_branch=aux_branch).train()
 
-    # -------------------------------------------#
-    #   权值文件的下载请看README
+    # -------------------------------------------
     #   权值和主干特征提取网络一定要对应
-    # -------------------------------------------#
+    # -------------------------------------------
     model_path = "model_data/pspnet_mobilenetv2.pth"
     # 加快模型训练的效率
     print('Loading weights into state dict...')
@@ -206,14 +202,7 @@ if __name__ == "__main__":
     with open("VOCdevkit/VOC2007/Segmentation/val.txt", "r") as f:
         val_lines = f.readlines()
 
-    # ------------------------------------------------------#
-    #   主干特征提取网络特征通用，冻结训练可以加快训练速度
-    #   也可以在训练初期防止权值被破坏。
-    #   Init_Epoch为起始世代
-    #   Interval_Epoch为冻结训练的世代
-    #   Epoch总训练世代
-    #   提示OOM或者显存不足请调小Batch_size
-    # ------------------------------------------------------#
+
     if True:
         lr = 1e-4
         Init_Epoch = 0
