@@ -10,17 +10,12 @@ import PIL.Image
 import yaml
 from labelme import utils
 
-'''
-我使用的labelme版本是3.16.7，建议使用该版本的labelme，有些版本的labelme会发生错误
-此处生成的标签图是8位彩色图，每个像素点的值就是这个像素点所属的种类
-'''
+
 if __name__ == '__main__':
     jpgs_path = "datasets/JPEGImages"
     pngs_path = "datasets/SegmentationClass"
-    classes = ["_background_", "aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow",
-               "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train",
-               "tvmonitor"]
-    # classes = ["_background_","cat","dog"]
+    classes = ["_background_", "number", "ship"]
+
 
     count = os.listdir("./datasets/before/")
     for i in range(0, len(count)):
